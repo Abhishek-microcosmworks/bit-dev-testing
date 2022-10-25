@@ -1,5 +1,23 @@
+html {
+  text-align: -webkit-center;
+  overflow-x: hidden;
+}
+body {
+  font-family: 'Noto Sans';
+  max-width: 400px !important;
+  /* margin: auto; */
+  background: #fcfcfc;
+  /* overflow-x: hidden;
+  overflow-y: scroll; */
+  position: relative;
+  text-align: center;
+}
+
 .App {
   text-align: center;
+  max-width: 400px;
+  width: 95%;
+  overflow: hidden;
 }
 
 .App-logo {
@@ -7,6 +25,60 @@
   pointer-events: none;
 }
 
+.logo {
+  /* display: inline-flex; */
+  margin-right: 10px;
+  min-width: 100%;
+  float: right;
+  max-width: 400px;
+  margin-top: 5px;
+  height: 30px;
+}
+
+.logo-loading {
+  /* display: inline-flex; */
+  margin-right: 10px;
+  min-width: 100%;
+  max-width: 400px;
+  margin-top: 5px;
+  height: 30px;
+}
+
+.disconnect {
+  /* display: inline-flex; */
+  margin-left: 20px;
+  text-align: left;
+  max-width: 400px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.search {
+  margin-bottom: 10px;
+  width: 90%;
+}
+.top-fixed {
+  position: fixed;
+  top: 0;
+  z-index: 999;
+  background: #fcfcfc;
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-input {
+  background-image: url('./assets/images/search.png') !important;
+  width: 100%;
+  background-color: #f1f2f4 !important;
+  border-radius: 20px;
+  height: 38px;
+  padding-bottom: 30px;
+  border: none;
+  padding: 5px 12px 5px 35px;
+  background-repeat: no-repeat;
+  background-size: 25px;
+  background-position: 5px;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -24,9 +96,53 @@
   color: white;
 }
 
+.item {
+  width: auto;
+  flex: 0 1 calc(50% - 4px);
+  background-color: #f1f2f4;
+}
+.item  > img::after:nth-child(n+12){
+   margin-top: 320px;
+}
+.span-img {
+  color: #fff;
+  margin-top: -2px;
+  display: inline-block;
+  font-size: 11px;
+  min-width: 45px;
+}
 .App-link {
   color: #61dafb;
 }
+/* progress bar  */
+.progressBar {
+  width: 100%;
+  border: 1px solid #e2e2e2;
+  height: 40px;
+  position: relative;
+}
+.progress__display{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    text-align: center;
+    line-height: 40px;
+    z-index: 30;
+  }
+  .progress__complete {
+    background: linear-gradient(187deg, rgb(156 133 18 / 74%) 0%, #caaf4e 100%);
+    color: #fff;
+    width: 0%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    z-index: 10;
+    border-radius: 3px;
+  }
+
 
 @keyframes App-logo-spin {
   from {
@@ -35,4 +151,80 @@
   to {
     transform: rotate(360deg);
   }
+}
+.connect-button {
+  background: linear-gradient(179.32deg, #3dbbfd -91.95%, #0179ff 99.45%);
+  border-radius: 15px;
+  height: 50px;
+  font-weight: 700;
+  font-size: 18px;
+  font: 'Noto Sans';
+  width: 70%;
+  border: none;
+  color: #ffffff;
+  margin-right: 10%;
+}
+
+.get-started {
+  font-size: 18px;
+  font-weight: 556;
+  max-width: 80%;
+}
+.directory-div {
+  max-width: 400px;
+  width: 100%;
+  margin-left: 20px;
+  display: flex;
+  overflow-x: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+}
+
+.directory-div::-webkit-scrollbar {
+  display: none;
+}
+
+
+
+.directory-display {
+  width: 100px;
+  min-width: 100px;
+  height: 100px;
+  margin: 2px;
+  text-align: center;
+  background-color: #f1f2f4;
+}
+
+.directory-name {
+  max-width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+audio::-webkit-media-controls-timeline,
+video::-webkit-media-controls-timeline {
+  display: none;
+}
+
+video::-webkit-media-controls-volume-slider {
+  display: none;
+}
+
+video::-webkit-media-controls-mute-button {
+  display: none;
+}
+
+.footer {
+  max-width: 425px;
+  bottom: 10%;
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+ 
+  text-align: center;
 }
