@@ -59,7 +59,7 @@ function VideoComponent({ id, element, itemOnClick }) {
         style={{position:'obsolute'}}
         url={videoUrl}
         width="100%"
-        height="100%"
+        height="98%"
         playing = {playing}
         onEnded={() => setEnded(true)}
         playIcon={

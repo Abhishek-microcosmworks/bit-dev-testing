@@ -70,6 +70,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
    }, [images])
 
    const itemOnClick = (element) => {
+    console.log(element)
     const id = element.id;
     const urlD = element.baseUrl;
     const defaultContainer = document.querySelectorAll('.item');
@@ -99,7 +100,9 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
       token: token,
       mime_type: mimeType,
       file_id: selectedId,
+      url: url
     };
+    //downloadFile(url, mimeType)
     sendForm(payload)
     console.log(payload)
     subscribeToTimer('download-google-photos-progress', (err, progress_state, progress) => {
@@ -113,6 +116,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
         file: final_data.final_data,
         fileSize: final_data.fileSize
       }
+      console.log(returnJson)
     if (window.vlogr) {
       window.vlogr.addData(1, JSON.stringify(returnJson));
     }
@@ -192,6 +196,18 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
     }
   }, [scroll]);
 
+  //download file
+  const downloadFile = (url, mimeType) => {
+    const type  = mimeType.split('/')[0]
+    if(type === 'image'){
+      const imageUrl = `${url}=d`
+      window.open(imageUrl)
+    }else{
+      const videoUrl = `${url}=dv`
+      window.open(videoUrl)
+    }
+  }
+ 
   return (
     <div style={{ textAlign: '-webkit-center' }}>
       {loading ? (
@@ -238,7 +254,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
               Disconnect
             </a>
           </div>
-          <div className="search">
+          <div className="search" style={{ display: 'none' }}>
             <input
               className="search-input"
               type="text"
@@ -251,7 +267,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
           </div>
           <div style={{ maxWidth: '400px', display: 'flex', flexFlow: 'row wrap', paddingBottom: '100px', marginTop: '120px', marginLeft: '50px'}}>
           {doc}
-          </div> 
+          </div>
           <div className={'footer'} style={{ display: selectedId ? 'block' : 'none'}}>
             <button
               className={'connect-button'}
