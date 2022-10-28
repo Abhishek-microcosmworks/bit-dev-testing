@@ -36,8 +36,9 @@ function VideoComponent({ id, element, itemOnClick }) {
 
     if (!videoUrl) {
       const video_id = element.id;
-      const video_url = `${element.productUrl}`;
+      const video_url = `${element.baseUrl}=dv`
       const converted_time = convertMsToHM(element.mediaMetadata.width);
+
       setVideoUrl(video_url);
       setTime(converted_time);
     }
@@ -45,16 +46,16 @@ function VideoComponent({ id, element, itemOnClick }) {
 
   useEffect(() => {
     if(ended) {
-      setEnded(false);
+      setEnded(false);  
       setPlaying(false);
     }
   },[ended])
+  
 
-    
   return (
     <div className="item" id={id} >
-      <div className="abc"  style={{width:'47%', height:'23%',  position: 'absolute' ,  background:'transparent'}} onClick={(e) => {itemOnClick(element)}}/>
-
+      <div className="abc"  style={{width:'47%', height:'10%',  position: 'absolute' ,  background:'transparent'}} onClick={(e) => {itemOnClick(element)}}/>
+      {console.log(videoUrl)}
       <ReactPlayer
         style={{position:'obsolute'}}
         url={videoUrl}
@@ -87,10 +88,10 @@ function VideoComponent({ id, element, itemOnClick }) {
               width="16"
               style={{ marginTop: '-1px', float: 'left', marginLeft: '-5px' }}
             />
-            <span className="span-img">{time}</span>
+            
           </button>
         }
-        light={element.baseUrl}
+        light={`${element.baseUrl}=d`}
       />
     </div>
   );

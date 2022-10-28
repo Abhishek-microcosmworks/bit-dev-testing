@@ -1,5 +1,5 @@
 import React, { useEffect , useState} from 'react'
-import GooglePhoto from '../../assets/images/Google_Photos_icon_(2020).svg.png';
+import GooglePhoto from '../../assets/images/googlephotos.com svg.png';
 import LinkBreak from '../../assets/images/LinkBreak.png'
 import spinner  from '../../assets/images/spinner.gif'
 import { subscribeToTimer, sendForm } from './api'
@@ -47,7 +47,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
     for(let index = 0; index < images.length; index++){
       const element = images[index]
       if (element.mimeType.includes('video/')) {
-        docs.push(<VideoComponent className="item" id={element.id} itemOnClick={itemOnClick} element={element} />);
+        docs.push(<VideoComponent key={element.id} className="item" id={element.id} itemOnClick={itemOnClick} element={element} />);
         continue;
       }
       docs.push(
@@ -77,7 +77,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
     defaultContainer.forEach((ele) => {
       ele.style = 'border:none;';
     });
-    if (sId !== id) {
+    if(sId !== id) {
       document.getElementById(id).style.border = '2px solid #168CFF';
       sId = id;
       setSelectId(id);
@@ -102,7 +102,6 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
       file_id: selectedId,
       url: url
     };
-    //downloadFile(url, mimeType)
     sendForm(payload)
     console.log(payload)
     subscribeToTimer('download-google-photos-progress', (err, progress_state, progress) => {
@@ -195,18 +194,6 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
       }, 1000);
     }
   }, [scroll]);
-
-  //download file
-  const downloadFile = (url, mimeType) => {
-    const type  = mimeType.split('/')[0]
-    if(type === 'image'){
-      const imageUrl = `${url}=d`
-      window.open(imageUrl)
-    }else{
-      const videoUrl = `${url}=dv`
-      window.open(videoUrl)
-    }
-  }
  
   return (
     <div style={{ textAlign: '-webkit-center' }}>
@@ -214,7 +201,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
         <div>
          <div className={'top-fixed'}>    
           <div className={'logo-loading'}>
-            <div style={{ float: 'right' }}>
+            <div style={{ float: 'right'}}>
               <img src={GooglePhoto} height={'30px'} />
             </div>
           </div>
@@ -244,12 +231,12 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
         <div>
         <div className={'top-fixed'}>
           <div className={'logo'}>
-            <div style={{ float: 'right' }}>
-              <img src={GooglePhoto} height={'40px'} />
+            <div style={{ float: 'right', marginRight: '20px' }}>
+              <img src={GooglePhoto} height={'30px'} />
             </div>
           </div>
           <div className={'disconnect'}>
-            <a style={{ float: 'left', color: '#404040' }} type="primary" onClick={onSignOut}>
+            <a style={{color: '#404040' }} type="primary" onClick={onSignOut}>
             <img src={LinkBreak} alt='' height={'16px'}/>
               Disconnect
             </a>
@@ -268,7 +255,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
           <div style={{ maxWidth: '400px', display: 'flex', flexFlow: 'row wrap', paddingBottom: '100px', marginTop: '120px', marginLeft: '50px'}}>
           {doc}
           </div>
-          <div className={'footer'} style={{ display: selectedId ? 'block' : 'none'}}>
+          <div className={'footer'} style={{ display: selectedId ? 'block' : 'none'}} >
             <button
               className={'connect-button'}
               onClick={() => {
@@ -278,7 +265,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
               Add
             </button>
           </div>
-        </div>
+          </div>
       )}
       {isLoading === true ? <div style={{ marginBottom : '50px' }}>
         <img src={spinner} style={{ marginBottom: '100px' }} alt="spinner"  height={50} width={50}/>

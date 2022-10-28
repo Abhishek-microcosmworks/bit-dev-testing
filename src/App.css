@@ -40,13 +40,13 @@ body {
   margin-right: 10px;
   min-width: 100%;
   max-width: 400px;
-  margin-top: 5px;
+  margin-top: 15px;
   height: 30px;
 }
 
 .disconnect {
   /* display: inline-flex; */
-  margin-left: 20px;
+  margin-left: 50px;
   text-align: left;
   max-width: 400px;
   margin-bottom: 10px;
@@ -162,7 +162,7 @@ body {
   width: 70%;
   border: none;
   color: #ffffff;
-  margin-right: 10%;
+
 }
 
 .get-started {
@@ -183,8 +183,6 @@ body {
 .directory-div::-webkit-scrollbar {
   display: none;
 }
-
-
 
 .directory-display {
   width: 100px;
@@ -221,10 +219,16 @@ video::-webkit-media-controls-mute-button {
 
 .footer {
   max-width: 425px;
-  bottom: 10%;
+  bottom: 5%;
   position: fixed;
   width: 100%;
   z-index: 100;
- 
-  text-align: center;
+  margin: 0 auto;
+  align-items: center;
+}
+
+@media screen and (max-width: 400px) {
+  .App{
+    width: 89%;
+  }
 }

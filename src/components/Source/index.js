@@ -2,7 +2,7 @@ import React,{useEffect, useState} from 'react';
 import { gapi } from 'gapi-script';
 import ListDocuments from '../ListDocuments/ListDocuments';
 import { useCookies } from 'react-cookie';
-import GooglePhotoIcon from '../../assets/images/Google_Photos_icon_(2020).svg.png'
+import GooglePhotoIcon from '../../assets/images/Group 308.png'
 
 
 const CLIENT_ID = process.env.REACT_APP_GOOGLE_PHOTOS_CLIENT_ID
@@ -103,21 +103,19 @@ const Source = () => {
         />
       ) : (
         <div>
-          
             <div className="source-container" style={{ paddingTop: '35%' }}>
             <div className="content-container">
-                <span className="content, get-started">Get started by connecting your account</span>
+                <span className="content, get-started" style={{ color: "#404040", fontSize: '18px'}}>Get started by connecting your account</span>
               </div>
               <div className="icon-container" style={{ paddingTop: '40px', marginRight: '20px' }}>
               <div className="icon icon-success">
-                  <img height="148" width="224" src={GooglePhotoIcon} />
+                  <img height="100px" width="100.72px" src={GooglePhotoIcon} />
               </div>
               </div>
               <div className={"content-container"} style={{ paddingTop: '50px' }} onClick={() => handleClientLoad()} >
                 <button className={'connect-button'}>Connect</button>
               </div>
             </div>
-          
         </div>
       )}
     </div>
