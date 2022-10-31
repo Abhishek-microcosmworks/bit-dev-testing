@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
-import PlayIcon from '../../assets/images/playicon.png';
+import PlayIcon from '../../assets/images/Vector.png';
 
 function VideoComponent({ id, element, itemOnClick }) {
   const [videoUrl, setVideoUrl] = useState('');
@@ -51,11 +51,20 @@ function VideoComponent({ id, element, itemOnClick }) {
     }
   },[ended])
   
-
   return (
     <div className="item" id={id} >
-      <div className="abc"  style={{width:'47%', height:'10%',  position: 'absolute' ,  background:'transparent'}} onClick={(e) => {itemOnClick(element)}}/>
-      {console.log(videoUrl)}
+      <div 
+       className="abc"  
+       style={{
+        width:'47%', 
+        height:'33%',  
+        position: 'absolute',
+        minHeight: '150px',
+        maxHeight: '150px',
+        background:'transparent',
+        zIndex: 88,
+      }} 
+      onClick={(e) => {itemOnClick(element)}}/>
       <ReactPlayer
         style={{position:'obsolute'}}
         url={videoUrl}
@@ -66,29 +75,27 @@ function VideoComponent({ id, element, itemOnClick }) {
         playIcon={
           <button
             style={{
-              borderRadius: '10px',
+              borderRadius: '50%',
               display: 'inline-flex',
-              zIndex: 99,
-              marginTop: '90%',
-              width: '70px',
+              zIndex: 2,
+              margin: '125px 96px 5px 5px',
+              width: '20px',
               height: '20px',
-              backgroundColor: 'transparent',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
               marginRight: 'auto',
               marginLeft: '5px',
               marginBottom: '5px',
-              border: '3px solid #fff',
-              zIndex:101
+              border: 'none',
+              textAlign: 'end',
             }}
-
             onClick={handlePlaying}
           >
             <img
               src={PlayIcon}
               alt="close"
-              width="16"
-              style={{ marginTop: '-1px', float: 'left', marginLeft: '-5px' }}
-            />
-            
+              width="12"
+              style={{ marginTop: '3px', float: 'left', marginRight: '-5px', maxWidth: '100%', maxHeight: '148px', cursor: 'pointer' }}
+            />           
           </button>
         }
         light={`${element.baseUrl}=d`}

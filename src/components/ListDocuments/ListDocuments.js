@@ -57,7 +57,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
          id={element.id}
          onClick={(e) => itemOnClick(element)}
         >
-        <img src={element.baseUrl} alt={''} style={{ padding: '0px', maxWidth: '100%'}} />
+        <img src={element.baseUrl} alt={''} style={{ maxWidth: '100%', maxHeight: '148px', margin: 'auto'}} />
         </div>
       )
     }
@@ -70,7 +70,6 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
    }, [images])
 
    const itemOnClick = (element) => {
-    console.log(element)
     const id = element.id;
     const urlD = element.baseUrl;
     const defaultContainer = document.querySelectorAll('.item');
@@ -243,6 +242,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
           </div>
           <div className="search" style={{ display: 'none' }}>
             <input
+            style={{ display: 'none' }}
               className="search-input"
               type="text"
               value={searchText}
@@ -252,11 +252,19 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
             ></input>
           </div>
           </div>
-          <div style={{ maxWidth: '400px', display: 'flex', flexFlow: 'row wrap', paddingBottom: '100px', marginTop: '120px', marginLeft: '50px'}}>
+          <div 
+            style={{ 
+              maxWidth: '400px', 
+              display: 'flex', 
+              flexFlow: 'row wrap', 
+              paddingBottom: '250px', 
+              marginTop: '110px',
+              }}>
           {doc}
           </div>
-          <div className={'footer'} style={{ display: selectedId ? 'block' : 'none'}} >
+          <div className={'footer'} style={{ display: selectedId ? 'block' : 'none', zIndex: 999}} >
             <button
+            style={{ marginRight: '20px' }}
               className={'connect-button'}
               onClick={() => {
                 handleAdd();
@@ -266,6 +274,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
             </button>
           </div>
           </div>
+          
       )}
       {isLoading === true ? <div style={{ marginBottom : '50px' }}>
         <img src={spinner} style={{ marginBottom: '100px' }} alt="spinner"  height={50} width={50}/>
