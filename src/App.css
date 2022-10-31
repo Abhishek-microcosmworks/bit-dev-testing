@@ -40,13 +40,13 @@ body {
   margin-right: 10px;
   min-width: 100%;
   max-width: 400px;
-  margin-top: 15px;
+  margin-top: 10px;
   height: 30px;
 }
 
 .disconnect {
   /* display: inline-flex; */
-  margin-top: 80px;
+  margin-top: 50px;
   margin-left: 10px;
   text-align: left;
   max-width: 400px;
@@ -234,4 +234,46 @@ video::-webkit-media-controls-mute-button {
   .connect-button{
     margin-left: 40px;
   }
+}
+
+progress {
+  border: none;
+  width: 200px;
+  height: 5px;
+  background: #128cfe;
+  border-radius: 2.5px;
+}
+
+progress::-webkit-progress-value {
+  background: #128cfe;
+  border-radius: 2.5px;
+}
+
+progress::-moz-progress-bar {
+  background: #ecf3ff;
+}
+
+progress::-webkit-progress-value {
+  background: #128cfe;
+  border-radius: 2.5px;
+}
+
+progress::-webkit-progress-bar {
+  background: #ecf3ff;
+  border-radius: 2.5px;
+}
+
+
+.cancel-button {
+  font-size: 18px;
+  font-weight: 600;
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  box-sizing: border-box;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 270px;
+  height: 50px;
+  position: relative;
+  margin-top: 25%;
 }
