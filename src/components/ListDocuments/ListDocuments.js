@@ -113,9 +113,9 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
         type: final_data.type,
         file: final_data.final_data,
         fileSize: final_data.fileSize,
-        mp4 : final_data.url
+        mp4 : final_data.final_data
       }
-     // console.log(returnJson)
+    console.log(returnJson)
     if (window.vlogr) {
       window.vlogr.addData(1, JSON.stringify(returnJson));
     }
