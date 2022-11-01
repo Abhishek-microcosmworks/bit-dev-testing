@@ -236,11 +236,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
           </div>
           <div className={'disconnect'}>
             <a style={{color: '#404040' }} type="primary" onClick={onSignOut}>
-<<<<<<< HEAD
             <img src={LinkBreak} alt='' height={'13px'} style={{ marginRight: "2px" }}/>
-=======
-            <img src={LinkBreak} alt='' height={'13px'} style={{marginRight:"2px"}}/>
->>>>>>> cb599b08a02d987b824fd7c69f6d79be73ec137c
               Disconnect
             </a>
           </div>
