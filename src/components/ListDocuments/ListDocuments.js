@@ -102,8 +102,8 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
       url: url
     };
     sendForm(payload)
-    console.log(payload)
     subscribeToTimer('download-google-photos-progress', (err, progress_state, progress) => {
+      console.log(progress)
       setProgress(progress);
       setProgressState(progress_state);
     });
@@ -112,9 +112,10 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
         action : 'create',
         type: final_data.type,
         file: final_data.final_data,
-        fileSize: final_data.fileSize
+        fileSize: final_data.fileSize,
+        mp4 : final_data.url
       }
-      console.log(returnJson)
+     // console.log(returnJson)
     if (window.vlogr) {
       window.vlogr.addData(1, JSON.stringify(returnJson));
     }
@@ -220,7 +221,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
               <p className='App-intro process-header'>{progressState}</p>
               <p className='warning'> Don't turn off the app or device.</p>
               <progress id="file" className="progress_bar" value={progress} max="100"> </progress> 
-              <div className="w3-center w3-text-white text-color">{progress}%</div>
+              <div className="w3-center w3-text-white text-color" style={{ marginTop: '40px' }}>{progress}%</div>
               <div>{progress != 100 ?(<button className="cancel-button" type="reset" onClick={() => {}}>Cancel</button>):(<button className="cancel-button" type="reset" onClick={() => {}}>Cancel</button>)}</div>
               </div> 
           </div>
@@ -262,6 +263,9 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
               }}>
           {doc}
           </div>
+          <div style={{ display: isLoading === true ? 'block' : 'none' , marginBottom: '250px'}}>
+            <img src={spinner} height="30px" alt='loading....' />
+          </div>
           <div className={'footer'} style={{ display: selectedId ? 'block' : 'none', zIndex: 999}} >
             <button
             style={{ marginRight: '20px' }}
@@ -273,12 +277,8 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
               Add
             </button>
           </div>
-          </div>
-          
-      )}
-      {isLoading === true ? <div style={{ marginBottom : '50px' }}>
-        <img src={spinner} style={{ marginBottom: '100px' }} alt="spinner"  height={50} width={50}/>
-      </div> : null}
+          </div>  
+      )} 
     </div>
     
   )}

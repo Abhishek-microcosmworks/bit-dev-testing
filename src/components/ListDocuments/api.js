@@ -5,11 +5,8 @@ const socket = openSocket('https://googledrivebk.plugin.vlogr.com/', { withCrede
 function subscribeToTimer(id, callback) {
   socket.on(id, (progress_state, progress) => callback(null, progress_state, progress));
 }
-
 function sendForm(jsonObject) {
   socket.emit('download-google-photos', JSON.stringify(jsonObject))
-  console.log(jsonObject)
 }
-
 export { subscribeToTimer };
 export { sendForm };
