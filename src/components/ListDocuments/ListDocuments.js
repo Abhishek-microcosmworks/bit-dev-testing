@@ -17,7 +17,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
    const [mimeType, setMimeType] = useState('');
    const [name, setName] = useState('');
    const [progress, setProgress] = useState(0);
-   const [progressState, setProgressState] = useState('stale');
+   const [progressState, setProgressState] = useState('Importing');
    const [searchText, setSearchText] = useState('')
    const [nxtPgToken, setNxtPgToken] = useState();
 
@@ -200,8 +200,8 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
         <div>
          <div className={'top-fixed'}>    
           <div className={'logo-loading'}>
-            <div style={{ float: 'right'}}>
-              <img src={GooglePhoto} height={'30px'} />
+            <div style={{ float: 'right', marginRight: '-15px'}}>
+              <img src={GooglePhoto} height={'25px'} />
             </div>
           </div>
           </div>
@@ -211,7 +211,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
             style={{
              width: "100%",
              height: 'auto',
-             marginTop: '75%',
+             marginTop: '50%',
              zIndex: 102,
              textAlign: 'center',
              marginLeft: '0px' 
@@ -236,7 +236,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
           </div>
           <div className={'disconnect'}>
             <a style={{color: '#404040' }} type="primary" onClick={onSignOut}>
-            <img src={LinkBreak} alt='' height={'16px'}/>
+            <img src={LinkBreak} alt='' height={'13px'} style={{ marginRight: "2px" }}/>
               Disconnect
             </a>
           </div>
@@ -258,7 +258,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
               display: 'flex', 
               flexFlow: 'row wrap', 
               paddingBottom: '250px', 
-              marginTop: '110px',
+              marginTop: '80px',
               }}>
           {doc}
           </div>
