@@ -7,7 +7,7 @@ function subscribeToTimer(id, callback) {
 }
 
 function sendForm(jsonObject) {
-  socket.emit('download-drive', JSON.stringify(jsonObject))
+  socket.emit('download-google-photos', JSON.stringify(jsonObject))
   console.log(jsonObject)
 }
 

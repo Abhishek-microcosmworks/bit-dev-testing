@@ -103,11 +103,11 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
     };
     sendForm(payload)
     console.log(payload)
-    subscribeToTimer('download-google-drive-progress', (err, progress_state, progress) => {
+    subscribeToTimer('download-google-photos-progress', (err, progress_state, progress) => {
       setProgress(progress);
       setProgressState(progress_state);
     });
-    subscribeToTimer('download-google-drive-final', (err, final_data, data) => {
+    subscribeToTimer('download-google-photos-final', (err, final_data, data) => {
       const returnJson = {
         action : 'create',
         type: final_data.type,
