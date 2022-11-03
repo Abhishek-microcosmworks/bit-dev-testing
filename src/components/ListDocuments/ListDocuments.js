@@ -197,11 +197,11 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
  
   return (
     <div style={{ textAlign: '-webkit-center' }}>
-      {loading ? (
+      {loading? (
         <div>
          <div className={'top-fixed'}>    
           <div className={'logo-loading'}>
-            <div style={{ float: 'right', marginRight: '-15px'}}>
+            <div style={{ float: 'right', marginRight: '10px'}}>
               <img src={GooglePhoto} height={'25px'} />
             </div>
           </div>
@@ -218,10 +218,10 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
              marginLeft: '0px' 
             }}>
             <div>
-              <p className='App-intro process-header' style={{fontColor:'#404040', fontWeight:700, fontSize: '20px'}}>{progressState}</p>
-              <p className='warning'> Don't turn off the app or device.</p>
+              <p className='App-intro process-header' style={{fontColor:'#404040', fontWeight:500, fontSize: '20px'}}>{progressState}</p>
+              <p className='warning' style={{fontSize:'13px'}}> Don't turn off the app or device.</p>
               <progress id="file" className="progress_bar" value={progress} max="100"> </progress> 
-              <div className="w3-center w3-text-white text-color" style={{ marginTop: '40px' }}>{progress}%</div>
+              <div className="w3-center w3-text-white text-color" style={{ marginTop: '20px', color:'#128CFE', fontSize:'12px' }}>{progress}%</div>
               <div>{progress != 100 ?(<button className="cancel-button" type="reset" onClick={() => {}}>Cancel</button>):(<button className="cancel-button" type="reset" onClick={() => {}}>Cancel</button>)}</div>
               </div> 
           </div>
@@ -255,7 +255,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
           </div>
           <div 
             style={{ 
-              maxWidth: '400px', 
+              maxWidth: '425px', 
               display: 'flex', 
               flexFlow: 'row wrap', 
               paddingBottom: '250px', 

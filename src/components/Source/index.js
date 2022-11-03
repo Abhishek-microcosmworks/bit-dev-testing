@@ -107,7 +107,7 @@ const Source = () => {
             <div className="content-container">
                 <span className="content, get-started" style={{ color: "#404040", fontSize: '18px'}}>Get started by connecting your account</span>
               </div>
-              <div className="icon-container" style={{ paddingTop: '40px', marginRight: '20px' }}>
+              <div className="icon-container" style={{ paddingTop: '40px'}}>
               <div className="icon icon-success">
                   <img height="100px" width="100.72px" src={GooglePhotoIcon} />
               </div>
