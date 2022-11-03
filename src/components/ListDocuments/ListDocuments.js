@@ -218,7 +218,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
              marginLeft: '0px' 
             }}>
             <div>
-              <p className='App-intro process-header'>{progressState}</p>
+              <p className='App-intro process-header' style={{fontColor:'#404040', fontWeight:700, fontSize: '20px'}}>{progressState}</p>
               <p className='warning'> Don't turn off the app or device.</p>
               <progress id="file" className="progress_bar" value={progress} max="100"> </progress> 
               <div className="w3-center w3-text-white text-color" style={{ marginTop: '40px' }}>{progress}%</div>
