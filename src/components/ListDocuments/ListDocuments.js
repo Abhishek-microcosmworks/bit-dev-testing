@@ -231,7 +231,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
         <div>
         <div className={'top-fixed'}>
           <div className={'logo'}>
-            <div style={{ float: 'right', marginRight: '-20px' }}>
+            <div style={{ float: 'right'}}>
               <img src={GooglePhoto} height={'25px'} />
             </div>
           </div>

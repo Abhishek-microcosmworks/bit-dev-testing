@@ -64,6 +64,7 @@ body {
   background: #fcfcfc;
   width: 100%;
   max-width: 425px;
+  padding-bottom: 10px
 }
 
 .search-input {
@@ -227,7 +228,7 @@ video::-webkit-media-controls-mute-button {
   bottom: 10%;
   position: fixed;
   padding-bottom: 10px;
-  width: 90%;
+  width: 100%;
   text-align: center; 
 }
 
