@@ -13,6 +13,9 @@ const DISCOVERY_DOCS = 'https://photoslibrary.googleapis.com/$discovery/rest?ver
 
 const SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly'
 
+//https://photosplugin.netlify.app
+const redirect_uri = "http://localhost:3000"
+
 const Source = () => {
 
   const [cookies, setCookie, removeCookie] = useCookies();
@@ -38,7 +41,7 @@ const Source = () => {
          client_id: CLIENT_ID,
          scope: `https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile ${SCOPES} openid`,
          ux_mode: "redirect",
-         redirect_uri: 'https://photosplugin.netlify.app',
+         redirect_uri: 'http://localhost:3000',
          access_type:'offline',
          include_granted_scopes: true
         })
@@ -55,10 +58,10 @@ const Source = () => {
           return
         }
         try {
-          const res = await axios.post("https://googledrivebk.plugin.vlogr.com/auth-code", {
+          const res = await axios.post("http://localhost:7010/auth-code", {
           
             requestedUrl: requestUrl,
-            redirectUrl: 'https://gdplugin.netlify.app'
+            redirectUrl: 'http://localhost:3000'
         
         })
         const backendResponse = res.data
@@ -121,6 +124,33 @@ const Source = () => {
         setSignedInUser();
         gapi.auth2.getAuthInstance().signOut();
       };
+
+      /*
+   loading the directory on reload of the browser
+ */
+  window.onload = function(){
+    if(signedInUser){
+      gapi.load('client:auth2', () => {
+        gapi.client.init({
+          apiKey: API_KEY,
+          clientId: CLIENT_ID,
+          discoveryDocs: [DISCOVERY_DOCS],
+          scope: SCOPES,
+          access: 'offline',
+         }).then(function () {
+           // Listen for sign-in state changes.
+           gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+           gapi.client.setToken({access_token: cookies.gUser.access_token })
+   
+           // Handle the initial sign-in state.
+           updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+           setGInstance(gapi.client);
+         })
+        })  
+    }else{
+      return;
+    }
+  }
     
       /**
        *  Initializes the API client library and sets up sign-in state
