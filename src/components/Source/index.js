@@ -13,7 +13,7 @@ const DISCOVERY_DOCS = 'https://photoslibrary.googleapis.com/$discovery/rest?ver
 
 const SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly'
 
-const redirect_uri = "http://localhost:3000"
+const redirect_uri = "https://photosplugin.netlify.app"
 
 const Source = () => {
 
@@ -60,7 +60,7 @@ const Source = () => {
           const res = await axios.post("https://googledrivebk.plugin.vlogr.com/auth-code", {
           
             requestedUrl: requestUrl,
-            redirectUrl: 'https://gdplugin.netlify.app'
+            redirectUrl: 'https://photosplugin.netlify.app'
         
         })
         const backendResponse = res.data
