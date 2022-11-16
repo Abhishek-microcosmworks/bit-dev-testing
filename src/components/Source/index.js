@@ -13,8 +13,6 @@ const DISCOVERY_DOCS = 'https://photoslibrary.googleapis.com/$discovery/rest?ver
 
 const SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly'
 
-const redirect_uri = "http://localhost:3000"
-
 const Source = () => {
 
   const [cookies, setCookie, removeCookie] = useCookies();
