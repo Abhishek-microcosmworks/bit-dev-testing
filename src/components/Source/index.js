@@ -48,6 +48,21 @@ const Source = () => {
       }
     }, [])
 
+    const getJsonFromUrl = (str) => {
+      const query = str;
+      const result = {};
+  
+      query.split('&').forEach((part) => {
+        const item = part.split('=');
+        if (item[0].includes('?')) {
+          item[0] = item[0].split('?')[1];
+        }
+        result[item[0]] = decodeURIComponent(item[1]);
+      });
+  
+      return result;
+    };
+
     /*
       Sending the request code to the backend.
      */
@@ -56,10 +71,11 @@ const Source = () => {
         if(requestUrl === ''){
           return
         }
+        const result = getJsonFromUrl(requestUrl);
         try {
           const res = await axios.post("https://googledrivebk.plugin.vlogr.com/auth-code", {
           
-            requestedUrl: requestUrl,
+            requestedUrl: result.code,
             redirectUrl: 'https://photosplugin.netlify.app'
         
         })
