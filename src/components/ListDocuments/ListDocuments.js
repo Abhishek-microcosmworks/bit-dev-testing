@@ -6,7 +6,7 @@ import { subscribeToTimer, sendForm } from './api'
 import useScrollPosition from '@react-hook/window-scroll';
 import VideoComponent from './VideoComponent';
 
-const ListDocuments = ({token, onSignOut, gapiClient }) => {
+const ListDocuments = ({ token, onSignOut, gapiClient }) => {
     
    const [doc, setDocuments] = useState([]);
    const [loading, setLoading] = useState(false)
@@ -21,24 +21,35 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
    const [searchText, setSearchText] = useState('')
    const [nxtPgToken, setNxtPgToken] = useState();
 
-   let sId = '';
+   let sId = ''; 
 
-   //fetching images 
+   /*
+    fetching images and videos 
+   */ 
     const fetchImages = async() => {
       setIsLoading(true)
-      const images = await gapiClient.photoslibrary.mediaItems.list({
-        pageSize: 10
-      })
-      renderImages(images.result.mediaItems)
-      setNxtPgToken(images.result.nextPageToken)
-      setIsLoading(false)
+      try {
+        const images = await gapiClient.photoslibrary.mediaItems.list({
+          pageSize: 10
+        })
+        renderImages(images.result.mediaItems)
+        setNxtPgToken(images.result.nextPageToken)
+        setIsLoading(false) 
+      } catch (error) {
+        window.onerror = function() {
+          return true
+        }
+      }
+      
     }
 
     useEffect(() => {
      fetchImages()
    },[gapiClient])
 
-   //Setting the images and video data in doc
+   /*
+     Setting the images and video data in doc
+    */
    const renderImages = (images) => {
     if(images === undefined){
       return
@@ -151,6 +162,7 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
     if(searchText === ''){
       await fetchImages()
     }
+    try {
       const searced = await gapiClient.photoslibrary.mediaItems.search({
         pageSize: 10,
         filters: {
@@ -164,6 +176,11 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
       })
       renderImages(searced.result.mediaItems)
       setNxtPgToken(searced.result.nextPageToken)
+    } catch (error) {
+      window.onerror = function(){
+        return true
+      }
+    }    
   }
 
   useEffect(() => {
@@ -181,7 +198,9 @@ const ListDocuments = ({token, onSignOut, gapiClient }) => {
        setIsLoading(false)
   }
 
-//Loading more data on next page
+/*
+  Loading more data on next page 
+*/
   useEffect(() => {
     var totalPageHeight = document.body.scrollHeight;
     var scrollPoint = window.scrollY + window.innerHeight;

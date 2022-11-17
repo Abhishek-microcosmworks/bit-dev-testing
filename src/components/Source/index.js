@@ -14,15 +14,16 @@ const DISCOVERY_DOCS = 'https://photoslibrary.googleapis.com/$discovery/rest?ver
 const SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly'
 
 
-const redirect_uri = "https://photosplugin.netlify.app"
+//const redirect_uri = "https://photosplugin.netlify.app"
+
 const Source = () => {
 
   const [cookies, setCookie, removeCookie] = useCookies();
   const [signedInUser, setSignedInUser] = useState();
   const [gInstance, setGInstance] = useState();
   const [ token, setToken ] = useState({});
-  const [requestUrl, setRequestUrl] = useState('')
-  const googleClient = useRef()
+  const [requestUrl, setRequestUrl] = useState('');
+  const googleClient = useRef();
 
    /*
     Loading the script and setting the authentication code from window.location.href 
@@ -40,7 +41,7 @@ const Source = () => {
          client_id: CLIENT_ID,
          scope: `https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile ${SCOPES} openid`,
          ux_mode: "redirect",
-         redirect_uri: 'http://localhost:3000',
+         redirect_uri: 'https://photosplugin.netlify.app',
          access_type:'offline',
          include_granted_scopes: true
         })
@@ -51,7 +52,7 @@ const Source = () => {
     const getJsonFromUrl = (str) => {
       const query = str;
       const result = {};
-  
+
       query.split('&').forEach((part) => {
         const item = part.split('=');
         if (item[0].includes('?')) {
@@ -59,7 +60,6 @@ const Source = () => {
         }
         result[item[0]] = decodeURIComponent(item[1]);
       });
-  
       return result;
     };
 
@@ -74,15 +74,8 @@ const Source = () => {
         const result = getJsonFromUrl(requestUrl);
         try {
           const res = await axios.post("http://localhost:7010/auth-code", {
-          
-<<<<<<< HEAD
-            requestedUrl: requestUrl,
-            redirectUrl: 'http://localhost:3000'
-=======
             requestedUrl: result.code,
             redirectUrl: 'https://photosplugin.netlify.app'
->>>>>>> b7181416ea06b746e00fcb2aaf16516818a41847
-        
         })
         const backendResponse = res.data
         if(backendResponse === ''){
@@ -101,7 +94,6 @@ const Source = () => {
       const client = googleClient.current;
       client.requestCode();
     }
-
       /**
        *  Sign in the user upon button click.
        */
@@ -115,18 +107,18 @@ const Source = () => {
        */
     
       useEffect(() => {
-        if (cookies.gUser) {
+        if (!gInstance && cookies && token.access_token) {
           handleClientLoad();
         }
-      }, [signedInUser, cookies]);
+      }, [signedInUser, token]);
     
       const updateSigninStatus = (isSignedIn) => {
         if (isSignedIn || cookies) {
+          
           // Set the signed in user
           if (cookies) {
             setSignedInUser(cookies);
           } else {
-            //setToken(gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse());
             setSignedInUser(gapi.auth2.getAuthInstance().currentUser.le.wt);
             document.cookie = `gUser=${cookies}`;
           }
@@ -145,57 +137,71 @@ const Source = () => {
         gapi.auth2.getAuthInstance().signOut();
       };
 
-      /*
+  /*
    loading the directory on reload of the browser
  */
-  window.onload = function(){
-    if(signedInUser){
-      gapi.load('client:auth2', () => {
+   useEffect(() => {
+    const initReloadClient = async () => {
+      try {
         gapi.client.init({
           apiKey: API_KEY,
           clientId: CLIENT_ID,
           discoveryDocs: [DISCOVERY_DOCS],
           scope: SCOPES,
           access: 'offline',
-         }).then(function () {
-           // Listen for sign-in state changes.
-           gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-           gapi.client.setToken({access_token: cookies.gUser.access_token })
-   
-           // Handle the initial sign-in state.
-           updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-           setGInstance(gapi.client);
-         })
-        })  
-    }else{
-      return;
+        }).then(function () {
+          // Listen for sign-in state changes.
+          gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+          gapi.client.setToken({access_token: cookies.gUser.access_token })
+            
+          // Handle the initial sign-in state.
+          updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+          setGInstance(gapi.client);
+        })
+      } catch (error) {
+        window.onerror = function(){
+          return true
+        }
+      }
+      
     }
-  }
-    
+  
+    window.addEventListener("unload", 
+      gapi.load('client:auth2', initReloadClient)
+    )
+  },[gInstance])  
+
       /**
        *  Initializes the API client library and sets up sign-in state
        *  listeners.
        */
-       const initClient = async() => { 
-        gapi.client.init({
-           apiKey: API_KEY,
-           clientId: CLIENT_ID,
-           discoveryDocs: [DISCOVERY_DOCS],
-           scope: SCOPES,
-           access: 'offline',
-         }).then(function () {
-           // Listen for sign-in state changes.
-           gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-           gapi.client.setToken({access_token: token.access_token })
-   
-           // Handle the initial sign-in state.
-           updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-           setGInstance(gapi.client);
-         })   
+       const initClient = async() => {
+        try {
+          gapi.client.init({
+            apiKey: API_KEY,
+            clientId: CLIENT_ID,
+            discoveryDocs: [DISCOVERY_DOCS],
+            scope: SCOPES,
+            access: 'offline',
+          }).then(function () {
+            // Listen for sign-in state changes.
+            gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+            gapi.client.setToken({access_token: token.access_token })
+    
+            // Handle the initial sign-in state.
+            updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+            setGInstance(gapi.client);
+          })
+        } catch (error) {
+          window.onerror = function(){
+            return true
+          }
+        }
+           
      }
     
       const handleClientLoad = () => {
-        gapi.load('client:auth2', initClient);
+        gapi.load('client:auth2', initClient)
       };
 
   return (
