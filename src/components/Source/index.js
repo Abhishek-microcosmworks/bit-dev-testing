@@ -13,9 +13,8 @@ const DISCOVERY_DOCS = 'https://photoslibrary.googleapis.com/$discovery/rest?ver
 
 const SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly'
 
-//https://photosplugin.netlify.app
-const redirect_uri = "http://localhost:3000"
 
+const redirect_uri = "https://photosplugin.netlify.app"
 const Source = () => {
 
   const [cookies, setCookie, removeCookie] = useCookies();
@@ -49,6 +48,21 @@ const Source = () => {
       }
     }, [])
 
+    const getJsonFromUrl = (str) => {
+      const query = str;
+      const result = {};
+  
+      query.split('&').forEach((part) => {
+        const item = part.split('=');
+        if (item[0].includes('?')) {
+          item[0] = item[0].split('?')[1];
+        }
+        result[item[0]] = decodeURIComponent(item[1]);
+      });
+  
+      return result;
+    };
+
     /*
       Sending the request code to the backend.
      */
@@ -57,11 +71,17 @@ const Source = () => {
         if(requestUrl === ''){
           return
         }
+        const result = getJsonFromUrl(requestUrl);
         try {
           const res = await axios.post("http://localhost:7010/auth-code", {
           
+<<<<<<< HEAD
             requestedUrl: requestUrl,
             redirectUrl: 'http://localhost:3000'
+=======
+            requestedUrl: result.code,
+            redirectUrl: 'https://photosplugin.netlify.app'
+>>>>>>> b7181416ea06b746e00fcb2aaf16516818a41847
         
         })
         const backendResponse = res.data
