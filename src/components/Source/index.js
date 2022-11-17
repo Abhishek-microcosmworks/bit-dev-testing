@@ -73,7 +73,7 @@ const Source = () => {
         }
         const result = getJsonFromUrl(requestUrl);
         try {
-          const res = await axios.post("http://localhost:7010/auth-code", {
+          const res = await axios.post("https://googledrivebk.plugin.vlogr.com/auth-code", {
             requestedUrl: result.code,
             redirectUrl: 'https://photosplugin.netlify.app'
         })
