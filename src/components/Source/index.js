@@ -41,7 +41,7 @@ const Source = () => {
          client_id: CLIENT_ID,
          scope: `https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile ${SCOPES} openid`,
          ux_mode: "redirect",
-         redirect_uri: 'http://localhost:3000',
+         redirect_uri: 'https://photosplugin.netlify.app',
          access_type:'offline',
          include_granted_scopes: true
         })
@@ -73,9 +73,9 @@ const Source = () => {
         }
         const result = getJsonFromUrl(requestUrl);
         try {
-          const res = await axios.post("http://localhost:7010/auth-code", {
+          const res = await axios.post("https://googledrivebk.plugin.vlogr.com/auth-code", {
             requestedUrl: result.code,
-            redirectUrl: 'http://localhost:3000'
+            redirectUrl: 'https://photosplugin.netlify.app'
         })
         const backendResponse = res.data
         if(backendResponse === ''){
