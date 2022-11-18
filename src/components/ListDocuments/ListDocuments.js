@@ -107,7 +107,7 @@ const ListDocuments = ({ token, onSignOut, gapiClient }) => {
   
     setLoading(true);
     const payload = {
-      token: token,
+      token: token.access_token === undefined ? cookies.gUser : token,
       mime_type: mimeType,
       file_id: selectedId,
       url: url
