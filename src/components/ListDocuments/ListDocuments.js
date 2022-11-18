@@ -6,7 +6,7 @@ import { subscribeToTimer, sendForm } from './api'
 import useScrollPosition from '@react-hook/window-scroll';
 import VideoComponent from './VideoComponent';
 
-const ListDocuments = ({ token, onSignOut, gapiClient }) => {
+const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
     
    const [doc, setDocuments] = useState([]);
    const [loading, setLoading] = useState(false)
@@ -58,7 +58,7 @@ const ListDocuments = ({ token, onSignOut, gapiClient }) => {
     for(let index = 0; index < images.length; index++){
       const element = images[index]
       if (element.mimeType.includes('video/')) {
-        docs.push(<VideoComponent key={element.id} className="item" id={element.id} itemOnClick={itemOnClick} element={element} />);
+        docs.push(<VideoComponent className="item" id={element.id} itemOnClick={itemOnClick} element={element} />);
         continue;
       }
       docs.push(
@@ -107,7 +107,7 @@ const ListDocuments = ({ token, onSignOut, gapiClient }) => {
   
     setLoading(true);
     const payload = {
-      token: token,
+      token: token.access_token === undefined ? cookies.gUser : token,
       mime_type: mimeType,
       file_id: selectedId,
       url: url

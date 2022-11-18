@@ -41,7 +41,7 @@ const Source = () => {
          client_id: CLIENT_ID,
          scope: `https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile ${SCOPES} openid`,
          ux_mode: "redirect",
-         redirect_uri: 'https://photosplugin.netlify.app',
+         redirect_uri: 'http://localhost:3000',
          access_type:'offline',
          include_granted_scopes: true
         })
@@ -75,7 +75,7 @@ const Source = () => {
         try {
           const res = await axios.post("http://localhost:7010/auth-code", {
             requestedUrl: result.code,
-            redirectUrl: 'https://photosplugin.netlify.app'
+            redirectUrl: 'http://localhost:3000'
         })
         const backendResponse = res.data
         if(backendResponse === ''){
@@ -162,8 +162,7 @@ const Source = () => {
         window.onerror = function(){
           return true
         }
-      }
-      
+      } 
     }
   
     window.addEventListener("unload", 
@@ -196,8 +195,7 @@ const Source = () => {
           window.onerror = function(){
             return true
           }
-        }
-           
+        }    
      }
     
       const handleClientLoad = () => {
@@ -211,6 +209,7 @@ const Source = () => {
           token={token}
           onSignOut={handleSignOutClick}
           gapiClient={gInstance}
+          cookies={cookies}
         />
       ) : (
         <div>
