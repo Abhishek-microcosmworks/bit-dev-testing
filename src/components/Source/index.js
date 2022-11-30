@@ -80,7 +80,7 @@ const Source = () => {
     const result = getJsonFromUrl(requestUrl);
       try {
         const url = 'https://googledrivebk.plugin.vlogr.com/auth-code'
-        const res = await axios.post('http://localhost:7010/auth-code', {
+        const res = await axios.post(url, {
             requestedUrl: result.code,
             redirectUrl: redirect_uri
         })
