@@ -15,7 +15,6 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
    const [selectedId, setSelectId] = useState('');
    const [url, setUrl] = useState('');
    const [mimeType, setMimeType] = useState('');
-   const [name, setName] = useState('');
    const [progress, setProgress] = useState(0);
    const [progressState, setProgressState] = useState('Importing');
    const [searchText, setSearchText] = useState('')
@@ -24,7 +23,7 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
    let sId = ''; 
 
    /*
-    fetching images and videos 
+    Fetching images and videos.
    */ 
     const fetchImages = async() => {
       setIsLoading(true)
@@ -32,6 +31,7 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
         const images = await gapiClient.photoslibrary.mediaItems.list({
           pageSize: 10
         })
+        setImages(images.result.mediaItems)
         renderImages(images.result.mediaItems)
         setNxtPgToken(images.result.nextPageToken)
         setIsLoading(false) 
@@ -39,8 +39,7 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
         window.onerror = function() {
           return true
         }
-      }
-      
+      } 
     }
 
     useEffect(() => {
@@ -48,8 +47,8 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
    },[gapiClient])
 
    /*
-     Setting the images and video data in doc
-    */
+    Setting the images and video data in doc[].
+   */
    const renderImages = (images) => {
     if(images === undefined){
       return
@@ -58,7 +57,14 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
     for(let index = 0; index < images.length; index++){
       const element = images[index]
       if (element.mimeType.includes('video/')) {
-        docs.push(<VideoComponent className="item" id={element.id} itemOnClick={itemOnClick} element={element} />);
+        docs.push(
+          <VideoComponent
+            className="item"
+            key={element.id} 
+            id={element.id}
+            itemOnClick={itemOnClick} 
+            element={element} />
+          );
         continue;
       }
       docs.push(
@@ -68,7 +74,11 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
          id={element.id}
          onClick={(e) => itemOnClick(element)}
         >
-        <img src={element.baseUrl} alt={''} style={{ maxWidth: '100%', maxHeight: '148px', margin: 'auto'}} />
+          <img 
+           src={element.baseUrl} 
+           alt={''} 
+           style={{ maxWidth: '100%', maxHeight: '148px', margin: 'auto'}} 
+          />
         </div>
       )
     }
@@ -78,7 +88,7 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
 
    useEffect(() => {
     renderImages()
-   }, [images])
+   },[images])
 
    const itemOnClick = (element) => {
     const id = element.id;
@@ -93,18 +103,17 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
       setSelectId(id);
       setUrl(urlD);
       setMimeType(element.mimeType);
-      setName(element.filename);
     } else {
       setSelectId('');
       setUrl('');
       setMimeType('');
-      setName('');
     }
   };
 
+  /*
+   Handling add button and sending the file data to the backend.
+  */
   const handleAdd = async () => {
-    const api = 'http://localhost:3001/photos'
-  
     setLoading(true);
     const payload = {
       token: token.access_token === undefined ? cookies.gUser : token,
@@ -114,7 +123,6 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
     };
     sendForm(payload)
     subscribeToTimer('download-google-photos-progress', (err, progress_state, progress) => {
-      console.log(progress)
       setProgress(progress);
       setProgressState(progress_state);
     });
@@ -126,14 +134,13 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
         fileSize: final_data.fileSize,
         mp4 : final_data.final_data
       }
-    console.log(returnJson)
+      console.log(returnJson)
     if (window.vlogr) {
       window.vlogr.addData(1, JSON.stringify(returnJson));
     }
     if (window.webkit) {
       window.webkit.messageHandlers.addData.postMessage(returnJson);
     }
-
     if (window.top) {
       window.top.postMessage(returnJson, '*');
     }
@@ -142,9 +149,12 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
     setMimeType('');
     setLoading(false);
     setProgress(0)
-  })
+   })
   };
 
+  /*
+   Search implementation
+  */
   const handleChange = (e) => {
     e.preventDefault();
     search(e.target.value);
@@ -156,8 +166,9 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
     setSearchText(value);
   };
 
-  const scroll = useScrollPosition();
-
+  /*
+   Searching data on category and sending data to the renderImage().
+  */
   const searchedData = async() => {
     if(searchText === ''){
       await fetchImages()
@@ -186,33 +197,40 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
   useEffect(() => {
     searchedData()
   },[searchText])
+
+/*
+  Calling loadMorePages on scroll down.
+*/
+const scroll = useScrollPosition();
+
+useEffect(() => {
+  var totalPageHeight = document.body.scrollHeight;
+  var scrollPoint = window.scrollY + window.innerHeight;
+  let percentage = (scrollPoint / totalPageHeight) * 100;
   
+  if (percentage >= 99.5 && nxtPgToken) {
+    setIsLoading(true)
+    setTimeout(() => {
+      loadMorePages(nxtPgToken)
+    }, 1000);
+  }
+}, [scroll]);
+  
+  /*
+   Fetching more data using nextPageToken provided 
+   and setting the nxtPgToken, isLoading state and 
+   and setting fetched data in renderImages(data).
+  */
   const loadMorePages = async(nxtPgToken) => {
     setIsLoading(true)
     const morePages = await gapiClient.photoslibrary.mediaItems.list({
             pageToken: nxtPgToken,
             pageSize: 10
     })
-       renderImages(morePages.result.mediaItems)
-       setNxtPgToken(morePages.result.nextPageToken)
-       setIsLoading(false)
+    renderImages(morePages.result.mediaItems)
+    setNxtPgToken(morePages.result.nextPageToken)
+    setIsLoading(false)
   }
-
-/*
-  Loading more data on next page 
-*/
-  useEffect(() => {
-    var totalPageHeight = document.body.scrollHeight;
-    var scrollPoint = window.scrollY + window.innerHeight;
-    let percentage = (scrollPoint / totalPageHeight) * 100;
-    
-    if (percentage >= 99.5 && nxtPgToken) {
-      setIsLoading(true)
-      setTimeout(() => {
-        loadMorePages(nxtPgToken)
-      }, 1000);
-    }
-  }, [scroll]);
  
   return (
     <div style={{ textAlign: '-webkit-center' }}>
@@ -221,7 +239,7 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
          <div className={'top-fixed'}>    
           <div className={'logo-loading'}>
             <div style={{ float: 'right', marginRight: '10px'}}>
-              <img src={GooglePhoto} height={'25px'} />
+              <img src={GooglePhoto} height={'25px'} alt='logo' />
             </div>
           </div>
           </div>
@@ -251,15 +269,20 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
         <div className={'top-fixed'}>
           <div className={'logo'}>
             <div style={{ float: 'right'}}>
-              <img src={GooglePhoto} height={'25px'} />
+              <img src={GooglePhoto} height={'25px'} alt='logo' />
             </div>
           </div>
           <div className={'disconnect'}>
             <a style={{color: '#404040' }} type="primary" onClick={onSignOut}>
-            <img src={LinkBreak} alt='' height={'13px'} style={{ marginRight: "2px" }}/>
+            <img src={LinkBreak} alt='Disconnect' height={'13px'} style={{ marginRight: "2px" }}/>
               Disconnect
             </a>
           </div>
+          {/* Search has been disabled because it 
+              show results on the category provided 
+              by the api if in future needed can be
+              implemented also.
+          */}
           <div className="search" style={{ display: 'none' }}>
             <input
             style={{ display: 'none' }}
