@@ -7,9 +7,16 @@ function VideoComponent({ id, element, itemOnClick }) {
   const [time, setTime] = useState('');
   const [ playing, setPlaying] = useState(false);
   const [ ended, setEnded ] = useState(false);
+
   const handlePlaying = () => {
     setPlaying(true);
   }
+
+  /*
+   As don't have to play the video as of now
+   so just setting the video url in the 
+   react-player.
+  */
   useEffect(() => {
     const padTo2Digits = (num) => {
       return num.toString().padStart(2, '0');
@@ -35,10 +42,8 @@ function VideoComponent({ id, element, itemOnClick }) {
     };
 
     if (!videoUrl) {
-      const video_id = element.id;
-      const video_url = `${element.baseUrl}=dv`
+      const video_url = `${element.baseUrl}=dv`;
       const converted_time = convertMsToHM(element.mediaMetadata.width);
-
       setVideoUrl(video_url);
       setTime(converted_time);
     }
@@ -52,7 +57,7 @@ function VideoComponent({ id, element, itemOnClick }) {
   },[ended])
   
   return (
-    <div className="item" id={id} >
+    <div className="item" id={id}>
       <div 
        className="abc"  
        style={{

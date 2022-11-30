@@ -13,11 +13,9 @@ const DISCOVERY_DOCS = 'https://photoslibrary.googleapis.com/$discovery/rest?ver
 
 const SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly'
 
-
-//const redirect_uri = "https://photosplugin.netlify.app"
+const redirect_uri = "https://photosplugin.netlify.app"
 
 const Source = () => {
-
   const [cookies, setCookie, removeCookie] = useCookies();
   const [signedInUser, setSignedInUser] = useState();
   const [gInstance, setGInstance] = useState();
@@ -25,8 +23,8 @@ const Source = () => {
   const [requestUrl, setRequestUrl] = useState('');
   const googleClient = useRef();
 
-   /*
-    Loading the script and setting the authentication code from window.location.href 
+ /*
+  Loading the script and setting the authentication code from window object.
  */
     useEffect( () => {
       const script = document.createElement('script');
@@ -36,12 +34,17 @@ const Source = () => {
       document.body.appendChild(script)
   
       script.onload = function () {
+    /*
+      "global google" comment to be left out as it is 
+       as it disables eslint and works fine.
+    */
+
       /*global google*/
        googleClient.current =  google?.accounts.oauth2.initCodeClient({
          client_id: CLIENT_ID,
          scope: `https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile ${SCOPES} openid`,
          ux_mode: "redirect",
-         redirect_uri: 'https://photosplugin.netlify.app',
+         redirect_uri: redirect_uri,
          access_type:'offline',
          include_granted_scopes: true
         })
@@ -49,6 +52,9 @@ const Source = () => {
       }
     }, [])
 
+    /*
+     Extracting the code from the url.
+    */
     const getJsonFromUrl = (str) => {
       const query = str;
       const result = {};
@@ -63,26 +69,27 @@ const Source = () => {
       return result;
     };
 
-    /*
-      Sending the request code to the backend.
-     */
-    useEffect(() => {
-      async function getRequest(){
-        if(requestUrl === ''){
+  /*
+   Sending the requested code to the backend.
+  */
+  useEffect(() => {
+    async function getRequest(){
+      if(requestUrl === ''){
           return
-        }
-        const result = getJsonFromUrl(requestUrl);
-        try {
-          const res = await axios.post("https://googledrivebk.plugin.vlogr.com/auth-code", {
+      }
+    const result = getJsonFromUrl(requestUrl);
+      try {
+        const url = 'https://googledrivebk.plugin.vlogr.com/auth-code'
+        const res = await axios.post(url, {
             requestedUrl: result.code,
-            redirectUrl: 'https://photosplugin.netlify.app'
+            redirectUrl: redirect_uri
         })
-        const backendResponse = res.data
-        if(backendResponse === ''){
+      const backendResponse = res.data
+      if(backendResponse === ''){
           return
-        }
-        setCookie('gUser',JSON.stringify(backendResponse))
-        setToken(backendResponse)
+      }
+      setCookie('gUser',JSON.stringify(backendResponse))
+      setToken(backendResponse)
         } catch (error) {
           console.log(error)
         } 
@@ -90,127 +97,103 @@ const Source = () => {
       getRequest()
     },[requestUrl])
 
+    /*
+     Requesting the code from the google client.
+    */
     function getGoogleOauth(){
       const client = googleClient.current;
       client.requestCode();
     }
-      /**
-       *  Sign in the user upon button click.
-       */
-      const handleAuthClick = (event) => {
-        gapi.auth2.getAuthInstance().signIn();
-      };
-    
-      /**
-       *  Called when the signed in status changes, to update the UI
-       *  appropriately. After a sign-in, the API is called.
-       */
-    
-      useEffect(() => {
-        if (!gInstance && cookies && token.access_token) {
-          handleClientLoad();
-        }
-      }, [signedInUser, token]);
-    
-      const updateSigninStatus = (isSignedIn) => {
-        if (isSignedIn || cookies) {
-          
-          // Set the signed in user
-          if (cookies) {
-            setSignedInUser(cookies);
-          } else {
-            setSignedInUser(gapi.auth2.getAuthInstance().currentUser.le.wt);
-            document.cookie = `gUser=${cookies}`;
-          }
-        } else {
-          // prompt user to sign in
-          handleAuthClick();
-        }
-      };
-    
-      /**
-       *  Sign out the user upon button click.
-       */
-      const handleSignOutClick = (event) => {
-        removeCookie('gUser');
-        setSignedInUser();
-        gapi.auth2.getAuthInstance().signOut();
-      };
 
   /*
-   loading the directory on reload of the browser
- */
-   useEffect(() => {
-    const initReloadClient = async () => {
-      try {
-        gapi.client.init({
-          apiKey: API_KEY,
-          clientId: CLIENT_ID,
-          discoveryDocs: [DISCOVERY_DOCS],
-          scope: SCOPES,
-          access: 'offline',
+   * Initializes the API client library and sets up sign-in state
+   * listeners.
+  */
+   const initClient = async() => {
+    try {
+      gapi.client.init({
+        apiKey: API_KEY,
+        clientId: CLIENT_ID,
+        discoveryDocs: [DISCOVERY_DOCS],
+        scope: SCOPES,
+        access: 'offline',
         }).then(function () {
           // Listen for sign-in state changes.
           gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-          gapi.client.setToken({access_token: cookies.gUser.access_token })
-            
-          // Handle the initial sign-in state.
-          updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-          setGInstance(gapi.client);
-        })
-      } catch (error) {
-        window.onerror = function(){
-          return true
-        }
-      }
-      
-    }
-  
-    window.addEventListener("unload", 
-      gapi.load('client:auth2', initReloadClient)
-    )
-  },[gInstance])  
-
-      /**
-       *  Initializes the API client library and sets up sign-in state
-       *  listeners.
-       */
-       const initClient = async() => {
-        try {
-          gapi.client.init({
-            apiKey: API_KEY,
-            clientId: CLIENT_ID,
-            discoveryDocs: [DISCOVERY_DOCS],
-            scope: SCOPES,
-            access: 'offline',
-          }).then(function () {
-            // Listen for sign-in state changes.
-            gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-            gapi.client.setToken({access_token: token.access_token })
-    
+          if(token.access_token === undefined){
+            gapi.client.setToken({access_token: cookies.gUser.access_token })
+          }else{
+            gapi.client.setToken({access_token: token.access_token });
+          }
             // Handle the initial sign-in state.
             updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
             setGInstance(gapi.client);
           })
         } catch (error) {
-          window.onerror = function(){
-            return true
-          }
+          console.log(error)
         }
-           
      }
     
-      const handleClientLoad = () => {
-        gapi.load('client:auth2', initClient)
-      };
+  const handleClientLoad = () => {
+    gapi.load('client:auth2', initClient)
+  };
+
+  /*
+   * Sign in the user upon button click.
+  */
+  const handleAuthClick = (event) => {
+    gapi.auth2.getAuthInstance().signIn();
+  };
+    
+  /*
+   * Called when the signed in status changes, to update the UI
+   * appropriately. After a sign-in, the API is called.
+  */
+  useEffect(() => {
+    if (!gInstance && cookies && token.access_token) {
+        handleClientLoad();
+      }
+    }, [signedInUser, token]);
+    
+  const updateSigninStatus = (isSignedIn) => {
+    if (isSignedIn || cookies) {        
+    //Set the signed in user
+    if (cookies) {
+      setSignedInUser(cookies);
+    } else {
+      setSignedInUser(gapi.auth2.getAuthInstance().currentUser.le.wt);
+      document.cookie = `gUser=${cookies}`;
+          }
+    } else {
+      //prompt user to sign in
+      handleAuthClick();
+      }
+    };
+    
+ /*
+  * Sign out the user upon button click.
+ */
+  const handleSignOutClick = (event) => {
+    removeCookie('gUser');
+    setSignedInUser();
+    gapi.auth2.getAuthInstance().signOut();
+    };
+
+ /*
+  Loading the directory on reload of the browser.
+ */
+   useEffect(() => {
+    window.addEventListener("unload", handleClientLoad()) 
+  },[gInstance])  
 
   return (
     <div>
-    {signedInUser || cookies.gUser ? (
+      {signedInUser || cookies.gUser ? (
         <ListDocuments
           token={token}
           onSignOut={handleSignOutClick}
           gapiClient={gInstance}
+          cookies={cookies}
         />
       ) : (
         <div>
@@ -227,7 +210,7 @@ const Source = () => {
                 <button className={'connect-button'}>Connect</button>
               </div>
             </div>
-        </div>
+         </div>
       )}
     </div>
   )
