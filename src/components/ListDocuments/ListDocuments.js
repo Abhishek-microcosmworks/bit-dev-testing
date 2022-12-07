@@ -138,9 +138,17 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
     if (window.vlogr) {
       window.vlogr.addData(1, JSON.stringify(returnJson));
     }
-    if (window.webkit) {
-      window.webkit.messageHandlers.addData.postMessage(returnJson);
+
+    var ua = window.navigator.userAgent;
+    var iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
+    var webkit = !!ua.match(/WebKit/i);
+    var iOSSafari = iOS && webkit && !ua.match(/CriOS/i);
+
+    if (iOSSafari) {
+        var paramString = Object.entries(returnJson).map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&');
+        window.location.href = 'vlogrPluginData://' + paramString;
     }
+
     if (window.top) {
       window.top.postMessage(returnJson, '*');
     }
