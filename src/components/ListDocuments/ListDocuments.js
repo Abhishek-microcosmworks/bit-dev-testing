@@ -281,8 +281,8 @@ useEffect(() => {
             </div>
           </div>
           <div className={'disconnect'}>
-            <a style={{color: '#404040' }} type="primary" onClick={onSignOut}>
-            <img src={LinkBreak} alt='Disconnect' height={'13px'} style={{ marginRight: "2px" }}/>
+            <a style={{color: '#404040', display: 'flex', alignItems: 'center' }} type="primary" onClick={onSignOut}>
+            <img src={LinkBreak} alt='Disconnect' height={'12px'} style={{ marginRight: "2px" }}/>
               Disconnect
             </a>
           </div>
@@ -318,7 +318,7 @@ useEffect(() => {
           </div>
           <div className={'footer'} style={{ display: selectedId ? 'block' : 'none', zIndex: 999}} >
             <button
-            style={{ marginRight: '20px' }}
+            style={{ marginRight: '-3px', width: '98%' }}
               className={'connect-button'}
               onClick={() => {
                 handleAdd();
