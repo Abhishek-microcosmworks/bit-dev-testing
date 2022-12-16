@@ -139,12 +139,13 @@ const ListDocuments = ({ token, onSignOut, gapiClient, cookies }) => {
       window.vlogr.addData(1, JSON.stringify(returnJson));
     }
 
-    var ua = window.navigator.userAgent;
-    var iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
-    var webkit = !!ua.match(/WebKit/i);
-    var iOSSafari = iOS && webkit && !ua.match(/CriOS/i);
+    function iOS() {
+      return ['iPad Simulator','iPhone Simulator','iPod Simulator','iPad','iPhone','iPod'].includes(navigator.platform)
+     // iPad on iOS 13 detection
+      || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+    }
 
-    if (iOSSafari) {
+    if (iOS()) {
         var paramString = Object.entries(returnJson).map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&');
         window.location.href = 'vlogrPluginData://' + paramString;
     }
