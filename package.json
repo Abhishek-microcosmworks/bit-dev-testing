@@ -23,6 +23,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "preinstall": "node ./scripts/netlify-preinstall.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
